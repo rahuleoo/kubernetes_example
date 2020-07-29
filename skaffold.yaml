@@ -1,0 +1,65 @@
+apiVersion: skaffold/v2beta5
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - infra/k8s/client-depl.yaml
+      - infra/k8s/comments-depl.yaml
+      - infra/k8s/event-bus-depl.yaml
+      - infra/k8s/ingress-srv.yaml
+      - infra/k8s/moderation-depl.yaml
+      - infra/k8s/posts-depl.yaml
+      - infra/k8s/posts-srv.yaml
+      - infra/k8s/query-depl.yaml
+build:
+  local:
+    push: false
+  artifacts:
+    - image: rahulgupta1199/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.js'
+            dest: .
+    - image: rahulgupta1199/comments
+      context: comments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: rahulgupta1199/event-bus
+      context: event-bus
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: rahulgupta1199/moderation
+      context: moderation
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: rahulgupta1199/posts
+      context: posts
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: rahulgupta1199/query
+      context: query
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
